@@ -10,13 +10,13 @@ with open('LICENSE') as f:
     license = f.read()
 
 setup(
-    name='sample',
+    name='arp-simulator',
     version='0.0.1',
-    description='Sample package for Python-Guide.org',
+    description='Simple simulator for arp requests',
     long_description=readme,
-    author='Kenneth Reitz',
-    author_email='me@kennethreitz.com',
-    url='https://github.com/kennethreitz/samplemod',
+    author='Felipe Peiter',
+    author_email='Felipe Peiter',
+    url='https://github.com/fdpeiter/arp-simulator',
     license=license,
     packages=find_packages(exclude=('tests', 'docs'))
 )
