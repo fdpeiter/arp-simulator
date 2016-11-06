@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
-
 import netaddr
 
 from simulator.network.node import Node
 from simulator.network.router import Router
+from simulator.network.router import RouterPort
 from simulator.network.router_table import RouterTable
 
 
@@ -52,11 +52,11 @@ class FileParser:
         for router_line in routers:
             router_info = router_line.split(",")
             router_name = router_info[0]
-            router_ports = int(router_info[1])
-            router_ip_mac = []
+            router_ports = []
             for i in range(2, len(router_info), 2):
-                router_ip_mac.append((netaddr.EUI(router_info[i]), netaddr.IPNetwork(router_info[i+1])))
-            tmp_router = Router(router_name, router_ports, router_ip_mac, [])
+                port = RouterPort(netaddr.EUI(router_info[i]), netaddr.IPNetwork(router_info[i+1]))
+                router_ports.append(port)
+            tmp_router = Router(router_name, router_ports, [])
             self.routers.append(tmp_router)
 
     def parse_routing_tables(self, routing_tables_str):
@@ -66,8 +66,7 @@ class FileParser:
             table_info = routing_table_line.split(",")
             for router_entry in self.routers:
                 if router_entry.name == table_info[0]:
-                    rt_network = netaddr.IPNetwork(table_info[1])
-                    rt_gateway = netaddr.IPAddress(table_info[2])
-                    rt_port = int(table_info[3])
-                    tmp_router_table = RouterTable(rt_network, rt_gateway, rt_port)
+                    tmp_router_table = RouterTable(netaddr.IPNetwork(table_info[1]),
+                                                   netaddr.IPAddress(table_info[2]),
+                                                   int(table_info[3]))
                     router_entry.router_table.append(tmp_router_table)
