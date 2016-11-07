@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 import netaddr
+
+from simulator.network.arp_packet import ArpRequest, ArpReply
+from simulator.network.echo_packet import EchoRequest, EchoReply
 from simulator.network.router_table import RouterTable
 
 
 class RouterPort:
-    def __init__(self, mac, ip):
+    def __init__(self, mac, ip_address):
         self.mac = mac
-        self.ip = ip
+        self.ip_address = ip_address
 
     @property
     def mac(self):
@@ -20,15 +23,15 @@ class RouterPort:
             self.__mac = mac
 
     @property
-    def ip(self):
-        return self.__ip
+    def ip_address(self):
+        return self.__ip_address
 
-    @ip.setter
-    def ip(self, ip):
+    @ip_address.setter
+    def ip_address(self, ip):
         if not isinstance(ip, netaddr.IPNetwork):
             raise TypeError("Invalid IP/Prefix, must be in the format IP_ADDRESS/CIDR")
         else:
-            self.__ip = ip
+            self.__ip_address = ip
 
 
 class Router:
@@ -36,6 +39,39 @@ class Router:
         self.name = name
         self.ports = ports
         self.router_table = router_table
+        self.arp_table = {}
+
+    def arp_request(self, destination):
+        for table in self.router_table:
+            if destination in table.net_destination:
+                if table.next_hop != netaddr.IPAddress('0.0.0.0'):
+                    destination = table.next_hop
+                request = ArpRequest(self.name, self.ports[table.port].ip_address.ip, destination)
+                return request
+        return None
+
+    def arp_reply(self, src_ip, destination):
+        for port in self.ports:
+            if port.ip_address.ip == src_ip:
+                return ArpReply(self.name, destination, port.ip_address.ip, port.mac)
+        return None
+
+    def arp_add_entry(self, reply):
+        if reply.dst_host == self.name:
+            self.arp_table[reply.src_address] = reply.src_mac
+
+    def echo_request(self, src_address, dst_host, dst_address, ttl):
+        result = []
+        ttl -= 1
+        if dst_host not in self.arp_table:
+            result.append(self.arp_request(dst_address))
+        result.append(EchoRequest(self.name, dst_host, src_address, dst_address, ttl))
+        return result
+
+    def echo_reply(self, src_address, dst_host, dst_address, ttl):
+        ttl -= 1
+        reply = EchoReply(self.name, dst_host, src_address, dst_address, ttl)
+        return reply
 
     @property
     def name(self):

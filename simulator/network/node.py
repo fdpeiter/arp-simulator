@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-import netaddr
+from simulator.network.arp_packet import *
+from simulator.network.echo_packet import *
 
 
 class Node:
@@ -8,6 +9,38 @@ class Node:
         self.mac = mac
         self.ip_address = ip_address
         self.gateway = gateway
+        self.arp_table = {}
+
+    def arp_request(self, destination):
+        request = ArpRequest(self.name, self.ip_address.ip, destination)
+        return request
+
+    def arp_reply(self, destination):
+        reply = ArpReply(self.name, destination, self.ip_address.ip, self.mac)
+        return reply
+
+    def arp_add_entry(self, reply):
+        if reply.dst_host == self.name:
+            self.arp_table[reply.src_address] = reply.src_mac
+
+    def echo_request(self, dst_host, dst_address, ttl=8):
+        result = []
+        if dst_host not in self.arp_table:
+            if dst_address not in self.ip_address:
+                result.append(self.arp_request(self.gateway))
+            else:
+                result.append(self.arp_request(dst_address))
+        if dst_address not in self.ip_address:
+            result.append(EchoRequest(self.arp_table[self.gateway], self.name, dst_host,
+                                      self.ip_address.ip, dst_address, ttl))
+        else:
+            result.append(EchoRequest(self.arp_table[dst_address], self.name, dst_host,
+                                      self.ip_address.ip, dst_address, ttl))
+        return result
+
+    def echo_reply(self, dst_host, dst_address):
+        reply = EchoReply(self.name, dst_host, self.ip_address.ip, dst_address, 8)
+        return reply
 
     @property
     def name(self):
