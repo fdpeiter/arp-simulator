@@ -6,7 +6,7 @@ from simulator.network.echo_packet import EchoReply, EchoRequest
 
 class Simulator:
     def __init__(self, filename):
-        self.nodes, self.routers = FileParser(filename).parse_file()
+        self.nodes, self.routers, self.name_table = FileParser(filename).parse_file()
 
     def connect(self, node_list):
         for i in range(0, len(node_list)-1):

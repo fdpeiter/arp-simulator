@@ -15,6 +15,7 @@ class FileParser:
         self.filename = filename
         self.nodes = []
         self.routers = []
+        self.name_table = {}
 
     def parse_file(self):
         with open(self.filename, 'r') as f:
@@ -32,7 +33,7 @@ class FileParser:
                 self.parse_nodes(nodes_str)
                 self.parse_routers(routers_str)
                 self.parse_routing_tables(routing_tables_str)
-                return self.nodes, self.routers
+                return self.nodes, self.routers, self.name_table
 
     def parse_nodes(self, nodes_str):
         # Remove valores vazios da list
@@ -41,6 +42,7 @@ class FileParser:
             node_info = node_line.split(",")
             node_name = node_info[0]
             node_mac = netaddr.EUI(node_info[1])
+            self.name_table[node_mac] = node_name
             node_ip = netaddr.IPNetwork(node_info[2])
             node_gateway = netaddr.IPAddress(node_info[3])
             tmp_node = Node(node_name, node_mac, node_ip, node_gateway)
@@ -55,6 +57,7 @@ class FileParser:
             router_ports = []
             for i in range(2, len(router_info), 2):
                 port = RouterPort(netaddr.EUI(router_info[i]), netaddr.IPNetwork(router_info[i+1]))
+                self.name_table[router_info[i]] = router_name
                 router_ports.append(port)
             tmp_router = Router(router_name, router_ports, [])
             self.routers.append(tmp_router)
