@@ -6,7 +6,7 @@ from simulator.network.echo_packet import EchoReply, EchoRequest
 
 class Simulator:
     def __init__(self, filename):
-        self.nodes, self.routers, self.name_table = FileParser(filename).parse_file()
+        self.nodes, self.routers = FileParser(filename).parse_file()
 
     def connect(self, node_list):
         for i in range(0, len(node_list)-1):
@@ -34,6 +34,8 @@ class Simulator:
                     self.parse_arp_reply(command)
                 elif isinstance(command, EchoRequest):
                     commands.insert(0, self.parse_echo_request(command))
+                elif isinstance(command, EchoReply):
+                    commands.insert(0, self.parse_echo_reply(command))
 
     def parse_arp_request(self, command):
         for node in self.nodes:
@@ -47,7 +49,7 @@ class Simulator:
     def parse_arp_reply(self, command):
         for node in self.nodes:
             if node.name == command.dst_host:
-                node.arp_add_entry(command)
+                node.add_arp_entry(command)
 
     def parse_echo_request(self, command):
         if command.ttl == 0:
