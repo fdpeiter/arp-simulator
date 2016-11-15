@@ -13,11 +13,17 @@ SETUP
 
 USAGE
 =====
+ 
  1. Check the input format example and documentation in the docs/input_format.txt
+ 
  2. Proceed to create an .txt with the nodes, routers and routertables of the scenario you want to simulate.
- 3. Execute the program, pass the input file that you created an inform the order of communication between the nodes
+ 
+ 3. Execute the program, pass the input file that you created an inform the order of communication between the nodes.
+ 
         python input.txt n1 n2 n3
+ 
     In this example, the n1 will proceed to perform an ECHO REQUEST to n2, then, n2 will perform an ECHO REQUEST to n3.
+    
  4. The result will be printed in the console.
 
 ABOUT THE CODE
