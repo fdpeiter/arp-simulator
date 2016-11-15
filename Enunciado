@@ -7,12 +7,12 @@ Formato do arquivo de descrição de topologia
 #NODE
 <node_name>,<MAC>,<IP/prefix>,<gateway>
 #ROUTER
-<router_name>,<num_ports>,<MAC0>,<IP0/prefix>,<MAC1>,<IP1/prefix>,<MAC2>,<IP2/prefix> …
+<router_name>,<num_ports>,<MAC0>,<IP0/prefix>,<MAC1>,<IP1/prefix>,<MAC2>,<IP2/prefix>,...
 #ROUTERTABLE
 <router_name>,<net_dest/prefix>,<nexthop>,<port>
 Formato de saída
 
-Pacotes ARP Request: <src_name> box <src_name> : ARP - Who has <dst_IP>? Tell <src_IP>; 
+Pacotes ARP Request: <src_name> box <src_name> : ARP - Who has <dst_IP>? Tell <src_IP>;
 Pacotes ARP Reply: <src_name> => <dst_name> : ARP - <src_IP> is at <src_MAC>;
 Pacotes ICMP Echo Request: <src_name> => <dst_name> : ICMP - Echo request (src=<src_IP> dst=<dst_IP> ttl=<TTL>);
 Pacotes ICMP Echo Reply: <src_name> => <dst_name> : ICMP - Echo reply (src=<src_IP> dst=<dst_IP> ttl=<TTL>);
