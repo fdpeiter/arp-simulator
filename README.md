@@ -26,11 +26,6 @@ USAGE
     
  4. The result will be printed in the console.
 
-ABOUT THE CODE
-==============
-
-
-
 CONTACT
 =======
 
