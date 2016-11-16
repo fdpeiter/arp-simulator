@@ -11,7 +11,8 @@ SETUP
 =====
 
  1. Simple execute the setup.py for automatic install dependencies
-      python setup.py
+      
+      python setup.py install
 
 USAGE
 =====
