@@ -35,28 +35,33 @@ The main idea on the project was to think of the simplest way of setting up the 
 As relying on broadcast messages and the physical layer, the idea was concetrate the parsing of the request mainly on the routers where the nodes are connected. So, even if a node wants to send a ArpPacket or a EchoPacket for another node in the same network, the request is sent to the router, then redirected correctly to the desired recepient.
 
 arp_packet.py
+
 The class ArpPacket encapsulates all the necessary and relevant info about the request from one node to another.
 The classes ArpRequest and ArpReply are only used for formatting the string output of the class.
 
 
 echo_packet.py
+
 The class EchoPacket encapsulates all the necessary and relevant info about the request from one node to another.
 The classes EchoRequest and EchoReply are only used for formatting the string output of the class.
 
 
 node.py
+
 Contains the class Node, that it's responsable for storing the Node info.
 The node can generate requests and responses for Arp and Echo packets.
 Each request is encapsulated in the correspondent class then sent to the gateway, that is the RouterPort where the node is connected, then processed there.
 
 
 router.py
+
 The core of the simulator, the Router contains several RouterPorts, where we store the MAC and IP Address, besides the connected Nodes or RouterPorts.
 Each router receives and parses all the requests, redirecting all of them based on the SRC and DST Ip Address. 
 The router also changes the SRC_MAC of each request, so we can easily recognized who are sending or redirecting the request and who are recieving.
 
 
 router_table.py
+
 The router table stores each Router object info about the connected routes.
 
 
