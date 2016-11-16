@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import sys
 from simulator.file_parser import FileParser
 from simulator.network.arp_packet import ArpReply, ArpRequest
 from simulator.network.echo_packet import EchoReply, EchoRequest
