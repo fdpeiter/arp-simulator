@@ -36,8 +36,8 @@ class Simulator:
             result = result.__str__().replace("dst_host", self.mac_dict[command.dst_mac])
         print(result)
 
-sim = Simulator('/Users/Peiter/PycharmProjects/arp-simulator/tests/test_entry.txt')
-sim.connect(['n5','n1'])
+sim = Simulator(sys.argv[1])
+sim.connect(sys.argv[2:])
 
 
 
